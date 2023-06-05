@@ -1,0 +1,40 @@
+[package]
+name = "ragbooster"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+name = "ragbooster"
+crate-type = ["cdylib", "rlib"]
+
+[[bench]]
+name = "generate_iprp"
+harness = false
+
+[[bench]]
+name = "generate_b"
+harness = false
+
+[[bin]]
+name = "wikifact_runtime"
+path = "src/bin/wikifact_runtime.rs"
+
+[[bin]]
+name = "synth_runtime"
+path = "src/bin/synth_runtime.rs"
+
+[dependencies]
+pyo3 = "0.18.1"
+itertools = "0.10.5"
+rayon = "1.6.1"
+num_cpus = "1.15.0"
+serde = { version = "1.0.152", features = ["derive"] } # move to dev again
+serde_json = "1.0.93" # move to dev again
+rand = "0.8.5"
+
+[dev-dependencies]
+bencher = "0.1.5"
+approx = "0.5.1"
+csv = "1.2"
+npy = "0.4.0"
+
