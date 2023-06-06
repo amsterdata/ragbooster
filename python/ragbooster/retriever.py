@@ -48,11 +48,11 @@ class BingRetriever(ABC):
             query_cache.close()
 
     @abstractmethod
-    def create_query(self, prompt):
+    def create_query(self, question):
         pass
 
-    def retrieve(self, prompt):
-        query = self.create_query(prompt)
+    def retrieve(self, question):
+        query = self.create_query(question)
         result = self._search(query)
 
         return [(page['snippet'], page['url']) for page in result['webPages']['value']]

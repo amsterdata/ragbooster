@@ -1,12 +1,13 @@
 import numpy as np
 from collections import Counter
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from tqdm.notebook import tqdm
 
 @dataclass
 class Question:
     text: str
     correct_answers: list[str]
+    metadata: dict[str] = field(default_factory=dict)
 
 
 def score(test_questions, model):

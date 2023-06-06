@@ -12,7 +12,7 @@ class RAGModel:
 
     def generate(self, test_question):
 
-        results = self.retriever.retrieve(test_question.text)
+        results = self.retriever.retrieve(test_question)
 
         predictions = []
         for snippet, _ in results[:self.k]:
@@ -49,7 +49,7 @@ class RAGBooster:
             retrieved_answers = []
             retrieved_websites = []
 
-            for snippet, url in self.rag_model.retriever.retrieve(question.text):
+            for snippet, url in self.rag_model.retriever.retrieve(question):
                 retrieved_websites.append(url)
                 answer = self.rag_model.generator.generate(question, snippet)
                 retrieved_answers.append(answer)
@@ -88,7 +88,7 @@ class RAGBooster:
     # TODO this could be nicer with a decorator over the retriever
     def generate(self, question):
         predictions = []
-        for snippet, url in self.rag_model.retriever.retrieve(question.text):
+        for snippet, url in self.rag_model.retriever.retrieve(question):
             if len(predictions) < self.rag_model.k:
                 domain = self.rag_model.retriever.group(url)
                 if domain not in self.weights or \
