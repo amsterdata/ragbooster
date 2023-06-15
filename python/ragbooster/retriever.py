@@ -4,11 +4,12 @@ import tldextract
 import shelve
 from abc import ABC, abstractmethod
 
+
 class BingRetriever(ABC):
 
-    def __init__(self, from_cache_only=False, max_results_per_query=50):
+    def __init__(self, cache_path, max_results_per_query=50):
         self.subscription_key = os.getenv('BING_SUBSCRIPTION_KEY')
-        self.from_cache_only = from_cache_only
+        self.cache_path = cache_path
         self.max_results_per_query = max_results_per_query
 
     def group(self, source):
@@ -18,12 +19,10 @@ class BingRetriever(ABC):
     def _search(self, query):
 
         try:
-            query_cache = shelve.open('__bing_cache.pkl')
+            query_cache = shelve.open(self.cache_path)
 
             if query in query_cache:
                 return query_cache[query]
-            elif self.from_cache_only:
-                raise Exception(f'Query [{query}] not in cache, but we run in cache-only mode!')
 
             search_url = "https://api.bing.microsoft.com/v7.0/search"
             headers = {"Ocp-Apim-Subscription-Key": self.subscription_key}

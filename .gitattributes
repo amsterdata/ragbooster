@@ -1,0 +1,4 @@
+demo_data/gpt35-cache.sqlite filter=lfs diff=lfs merge=lfs -text
+demo_data/rp3b-cache.sqlite filter=lfs diff=lfs merge=lfs -text
+demo_data/__bing_cache.pkl filter=lfs diff=lfs merge=lfs -text
+demo_data/qa-cache.pkl filter=lfs diff=lfs merge=lfs -text

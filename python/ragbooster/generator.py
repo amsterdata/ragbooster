@@ -1,63 +1,70 @@
 from abc import ABC, abstractmethod
 import shelve
-from manifest import Manifest
 from transformers import pipeline
 
 
-class GPT35Generator(ABC):
+class Generator(ABC):
 
-    def __init__(self):
-        self.manifest = Manifest(
-            client_name="openai",
-            engine="text-davinci-003",
-            cache_name="sqlite",
-            cache_connection="manifest-cache.sqlite",
-        )
+    def __init__(self, llm, max_tokens):
+        self.llm = llm
+        self.max_tokens = max_tokens
 
-    def generate(self, question, snippet=None):
-        prompt = self._create_prompt(question, snippet)
-        response = self.manifest.run(prompt, max_tokens=10, return_response=True)
+    @abstractmethod
+    def _create_prompt(self, question):
+        pass
+
+    @abstractmethod
+    def _create_retrieval_prompt(self, question, retrieved_context):
+        pass
+
+    def _generate(self, prompt):
+        response = self.llm.run(prompt, max_tokens=self.max_tokens, return_response=True)
         return self._extract_answer(response)
 
-    @abstractmethod
-    def _create_prompt(self, question, snippet):
-        pass
+    def generate(self, question):
+        return self._generate(self._create_prompt(question))
+
+    def generate_with_retrieved_context(self, question, retrieved_context):
+        return self._generate(self._create_retrieval_prompt(question, retrieved_context))
 
     @abstractmethod
     def _extract_answer(self, response):
         pass
 
-# TODO Naming is weird here, as we have two different questions
+
+# TODO still inconsistent with LLM API, will be fixed at some point in time
 class HuggingfaceQAGenerator(ABC):
 
-    def __init__(self):
-        self.pipeline = pipeline('question-answering', model=self._model_name(),
-                                 tokenizer=self._model_name())
+    def __init__(self, model_name, cache_path):
+        self.cache_path = cache_path
+        self.pipeline = pipeline('question-answering', model=model_name, tokenizer=model_name)
 
     @abstractmethod
-    def _model_name(self):
+    def _create_prompt(self, question):
         pass
 
     @abstractmethod
-    def _qa_question(self):
-        pass
-
-    @abstractmethod
-    def _create_context(self, question, snippet=None):
+    def _create_retrieval_prompt(self, question, retrieved_context):
         pass
 
     @abstractmethod
     def _extract_answer(self, response):
         pass
 
-    def generate(self, question, snippet=None):
+    def generate(self, question):
+        return self._generate(self._create_prompt(question))
+
+    def generate_with_retrieved_context(self, question, retrieved_context):
+        return self._generate(self._create_retrieval_prompt(question, retrieved_context))
+
+    def _generate(self, prompt):
 
         try:
-            query_cache = shelve.open('__huggingface_cache.pkl')
+            query_cache = shelve.open(self.cache_path)
 
             # I have no idea why this returns a tuple... must be related to abstract classes in Python
-            question_text, = self._qa_question(),
-            context = self._create_context(question, snippet)
+            question_text = prompt['question']
+            context = prompt['context']
 
             # shelve can't handle tuples...
             query = f'{question_text};;;{context}'
@@ -66,8 +73,6 @@ class HuggingfaceQAGenerator(ABC):
                 return query_cache[query]
 
             response = self.pipeline({'question': question_text, 'context': context})
-
-
 
             answer = self._extract_answer(response)
             query_cache[query] = answer

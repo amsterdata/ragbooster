@@ -2,6 +2,7 @@ import json
 import pandas as pd
 from .core import Question
 
+
 def load_wikifact_questions(path):
 
     with open(path, 'r') as myfile:
@@ -17,6 +18,7 @@ def load_wikifact_questions(path):
         questions.append(Question(text, correct_answers))
 
     return questions
+
 
 def load_imputation_dataset(path, impute, based_on):
     table = pd.read_csv(path)

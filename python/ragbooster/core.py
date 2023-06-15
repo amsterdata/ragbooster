@@ -1,7 +1,7 @@
-import numpy as np
 from collections import Counter
 from dataclasses import dataclass, field
 from tqdm.notebook import tqdm
+
 
 @dataclass
 class Question:
@@ -23,7 +23,6 @@ def score(test_questions, model):
     return accuracy
 
 
-
 def mode(values):
     return Counter(values).most_common(n=1)[0][0]
 
@@ -41,7 +40,7 @@ def encode_retrievals(retrievals, retrieved_key, prediction_key, utility):
     all_retrieveds = list(all_retrieveds)
     all_retrieveds.sort()
 
-    mapping = {retrieved:index for index, retrieved in enumerate(all_retrieveds)}
+    mapping = {retrieved: index for index, retrieved in enumerate(all_retrieveds)}
 
     for retrieval in retrievals:
         retrieveds = [mapping[name] for name in retrieval[retrieved_key]]
@@ -64,7 +63,7 @@ def encode_groups(mapping, group):
     all_groups = list(groups)
     all_groups.sort()
 
-    group_mapping = {name:index for index, name in enumerate(all_groups)}
+    group_mapping = {name: index for index, name in enumerate(all_groups)}
 
     grouping = [0 for _ in range(0, len(mapping))]
 

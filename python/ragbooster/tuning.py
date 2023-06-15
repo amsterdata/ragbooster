@@ -2,6 +2,7 @@ from dataclasses import dataclass
 import numpy as np
 from .core import mode
 
+
 # TODO use precomputed groups here for performance
 def evaluate_sample_pruned(sample, utility, group, k, threshold, group_weights):
 

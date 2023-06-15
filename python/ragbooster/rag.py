@@ -3,7 +3,8 @@ from ragbooster import learn_importance
 from .core import grouped_weights, encode_groups, encode_retrievals, mode
 from .tuning import tune_pruning_threshold
 
-class RAGModel:
+
+class RetrievalAugmentedModel:
 
     def __init__(self, retriever, generator, k):
         self.retriever = retriever
@@ -15,8 +16,8 @@ class RAGModel:
         results = self.retriever.retrieve(test_question)
 
         predictions = []
-        for snippet, _ in results[:self.k]:
-            answer = self.generator.generate(test_question, snippet)
+        for context, _ in results[:self.k]:
+            answer = self.generator.generate_with_retrieved_context(test_question, context)
             predictions.append(answer)
 
         if len(predictions) > 0:
@@ -49,9 +50,9 @@ class RAGBooster:
             retrieved_answers = []
             retrieved_websites = []
 
-            for snippet, url in self.rag_model.retriever.retrieve(question):
+            for context, url in self.rag_model.retriever.retrieve(question):
                 retrieved_websites.append(url)
-                answer = self.rag_model.generator.generate(question, snippet)
+                answer = self.rag_model.generator.generate_with_retrieved_context(question, context)
                 retrieved_answers.append(answer)
 
             validation_corpus.append({
@@ -79,7 +80,7 @@ class RAGBooster:
                                                self._utility, self.rag_model.retriever.group,
                                                self.rag_model.k, normalize=True)
 
-        print(f'Achieved accuracy of {tuning_result.best_utility:.3f} with a pruning threshold ' + \
+        print(f'Achieved accuracy of {tuning_result.best_utility:.3f} with a pruning threshold ' +
               f'of {tuning_result.best_threshold:.5f} on the validation set.')
 
         self.weights = domain_weights
@@ -88,13 +89,13 @@ class RAGBooster:
     # TODO this could be nicer with a decorator over the retriever
     def generate(self, question):
         predictions = []
-        for snippet, url in self.rag_model.retriever.retrieve(question):
+        for context, url in self.rag_model.retriever.retrieve(question):
             if len(predictions) < self.rag_model.k:
                 domain = self.rag_model.retriever.group(url)
                 if domain not in self.weights or \
                         self.weights[domain] >= self.tuning_result.best_threshold:
 
-                    answer = self.rag_model.generator.generate(question, snippet)
+                    answer = self.rag_model.generator.generate_with_retrieved_context(question, context)
                     predictions.append(answer)
 
         if len(predictions) > 0:

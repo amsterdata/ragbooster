@@ -6,10 +6,9 @@ pytest-mock==3.3.1
 tldextract==3.4.0
 importnb==0.7.0
 manifest-ml==0.1.8
-#pandas==1.5.3
-#scipy==1.10.1
-#scikit-learn==1.2.2
+transformers[torch]==4.30.2
+pandas==1.5.3
+scikit-learn==1.2.2
 jupyter
 matplotlib
-#tabulate
 tqdm
