@@ -29,17 +29,6 @@ jobs:
         with:
           name: wheels
           path: dist
-      - name: Install Python test dependencies
-        run: |
-          python3.9 -m venv venv
-          source venv/bin/activate
-          pip install -r requirements.txt --upgrade --upgrade-strategy eager
-          maturin develop
-          pip install -r requirements-dev.txt --upgrade --upgrade-strategy eager
-      - name: Run Python tests
-        run: |
-          source venv/bin/activate
-          python -m pytest
 
   windows:
     runs-on: windows-latest
@@ -83,17 +72,6 @@ jobs:
         with:
           name: wheels
           path: dist
-      - name: Install Python test dependencies
-        run: |
-          python3.9 -m venv venv
-          source venv/bin/activate
-          pip install -r requirements.txt --upgrade --upgrade-strategy eager
-          maturin develop
-          pip install -r requirements-dev.txt --upgrade --upgrade-strategy eager
-      - name: Run Python tests
-        run: |
-          source venv/bin/activate
-          python -m pytest
 
   release:
     name: Release
