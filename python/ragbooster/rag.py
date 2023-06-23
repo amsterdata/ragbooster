@@ -16,8 +16,9 @@ class RetrievalAugmentedModel:
         results = self.retriever.retrieve(test_question)
 
         predictions = []
-        for context, _ in results[:self.k]:
-            answer = self.generator.generate_with_retrieved_context(test_question, context)
+        for context, source in results[:self.k]:
+            params = {'retrieved_context': context, 'source': source}
+            answer = self.generator.generate(test_question, params)
             predictions.append(answer)
 
         if len(predictions) > 0:
@@ -52,7 +53,8 @@ class RAGBooster:
 
             for context, url in self.rag_model.retriever.retrieve(question):
                 retrieved_websites.append(url)
-                answer = self.rag_model.generator.generate_with_retrieved_context(question, context)
+                params = {'retrieved_context': context, 'source': url}
+                answer = self.rag_model.generator.generate(question, params)
                 retrieved_answers.append(answer)
 
             validation_corpus.append({
@@ -94,8 +96,8 @@ class RAGBooster:
                 domain = self.rag_model.retriever.group(url)
                 if domain not in self.weights or \
                         self.weights[domain] >= self.tuning_result.best_threshold:
-
-                    answer = self.rag_model.generator.generate_with_retrieved_context(question, context)
+                    params = {'retrieved_context': context, 'source': url}
+                    answer = self.rag_model.generator.generate(question, params)
                     predictions.append(answer)
 
         if len(predictions) > 0:

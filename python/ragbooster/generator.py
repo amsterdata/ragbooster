@@ -10,22 +10,17 @@ class Generator(ABC):
         self.max_tokens = max_tokens
 
     @abstractmethod
-    def _create_prompt(self, question):
-        pass
-
-    @abstractmethod
-    def _create_retrieval_prompt(self, question, retrieved_context):
+    def _create_prompt(self, question, params):
         pass
 
     def _generate(self, prompt):
         response = self.llm.run(prompt, max_tokens=self.max_tokens, return_response=True)
         return self._extract_answer(response)
 
-    def generate(self, question):
-        return self._generate(self._create_prompt(question))
-
-    def generate_with_retrieved_context(self, question, retrieved_context):
-        return self._generate(self._create_retrieval_prompt(question, retrieved_context))
+    def generate(self, question, params=None):
+        if params is None:
+            params = {}
+        return self._generate(self._create_prompt(question, params))
 
     @abstractmethod
     def _extract_answer(self, response):
@@ -40,22 +35,17 @@ class HuggingfaceQAGenerator(ABC):
         self.pipeline = pipeline('question-answering', model=model_name, tokenizer=model_name)
 
     @abstractmethod
-    def _create_prompt(self, question):
-        pass
-
-    @abstractmethod
-    def _create_retrieval_prompt(self, question, retrieved_context):
+    def _create_prompt(self, question, params):
         pass
 
     @abstractmethod
     def _extract_answer(self, response):
         pass
 
-    def generate(self, question):
-        return self._generate(self._create_prompt(question))
-
-    def generate_with_retrieved_context(self, question, retrieved_context):
-        return self._generate(self._create_retrieval_prompt(question, retrieved_context))
+    def generate(self, question, params=None):
+        if params is None:
+            params = {}
+        return self._generate(self._create_prompt(question, params))
 
     def _generate(self, prompt):
 
