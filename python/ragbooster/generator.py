@@ -27,7 +27,6 @@ class Generator(ABC):
         pass
 
 
-# TODO still inconsistent with LLM API, will be fixed at some point in time
 class HuggingfaceQAGenerator(ABC):
 
     def __init__(self, model_name, cache_path):
@@ -52,7 +51,6 @@ class HuggingfaceQAGenerator(ABC):
         try:
             query_cache = shelve.open(self.cache_path)
 
-            # I have no idea why this returns a tuple... must be related to abstract classes in Python
             question_text = prompt['question']
             context = prompt['context']
 

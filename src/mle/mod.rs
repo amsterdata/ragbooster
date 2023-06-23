@@ -13,7 +13,7 @@ pub fn mle_importance(
     optional_grouping: Option<&Grouping>,
     k: usize,
     learning_rate: f64,
-    num_steps: usize,
+    num_epochs: usize, // TODO: rename to num_epochs
     n_jobs: usize,
 ) -> Vec<f64> {
 
@@ -25,7 +25,7 @@ pub fn mle_importance(
     #[allow(non_snake_case)]
     let N = retrievals.len();
 
-    for _ in 0..num_steps {
+    for _ in 0..num_epochs {
         let g = if n_jobs > 1 {
 
             rayon::ThreadPoolBuilder::new()
@@ -85,6 +85,7 @@ fn max_distinct_utility_contributions(retrievals: &[Retrieval]) -> usize {
         .iter()
         .map(|retrieval| {
             retrieval.utility_contributions.iter()
+                // TODO this has to become a parameter!
                 .map(|c| (c * 100.0) as i64) // TODO This is ugly and hardcodes a discretization strategy
                 .unique() // TODO not sure if hashing things is the fastest option here
                 .count()
