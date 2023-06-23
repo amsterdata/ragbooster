@@ -5,10 +5,12 @@ import shelve
 from abc import ABC, abstractmethod
 
 
+# TODO: Integrate retries https://stackoverflow.com/questions/15431044/can-i-set-max-retries-for-requests-request
 class BingRetriever(ABC):
 
     def __init__(self, cache_path, max_results_per_query=50):
         self.subscription_key = os.getenv('BING_SUBSCRIPTION_KEY')
+        # TODO: throw an error if subscription key is not set
         self.cache_path = cache_path
         self.max_results_per_query = max_results_per_query
 
