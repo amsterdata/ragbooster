@@ -48,6 +48,7 @@ class HuggingfaceQAGenerator(ABC):
 
     def _generate(self, prompt):
 
+        query_cache = None
         try:
             query_cache = shelve.open(self.cache_path)
 
@@ -67,4 +68,5 @@ class HuggingfaceQAGenerator(ABC):
             return answer
 
         finally:
-            query_cache.close()
+            if query_cache is not None:
+                query_cache.close()

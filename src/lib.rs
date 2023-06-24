@@ -13,7 +13,7 @@ fn learn_importance(
     py_retrievals: &PyList,
     k: usize,
     learning_rate: f64,
-    num_steps: usize,
+    num_epochs: usize,
     n_jobs: Option<isize>,
     grouping: Option<&PyList>,
 ) -> PyResult<Vec<f64>> {
@@ -62,7 +62,7 @@ fn learn_importance(
         grouping_reference,
         k,
         learning_rate,
-        num_steps,
+        num_epochs,
         decoded_n_jobs
     );
 

@@ -11,6 +11,23 @@ classifiers = [
     "Programming Language :: Python :: Implementation :: PyPy",
 ]
 
+dependencies = [
+    "tldextract==3.4.0",
+    "manifest-ml==0.1.8",
+    "pandas==1.5.3",
+    "scikit-learn==1.2.2",
+    "tqdm==4.65.0",
+    "transformers[torch]==4.30.2",
+    "torch==2.0.1",
+]
+
+[project.optional-dependencies]
+dev = [
+    "maturin==0.14.8",
+    "jupyter==1.0.0",
+    "pytest==6.2.5",
+    "flake8==6.0.0",
+]
 
 [tool.maturin]
 features = ["pyo3/extension-module"]

@@ -13,7 +13,7 @@ pub fn mle_importance(
     optional_grouping: Option<&Grouping>,
     k: usize,
     learning_rate: f64,
-    num_epochs: usize, // TODO: rename to num_epochs
+    num_epochs: usize,
     n_jobs: usize,
 ) -> Vec<f64> {
 

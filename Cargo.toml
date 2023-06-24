@@ -37,6 +37,3 @@ bencher = "0.1.5"
 approx = "0.5.1"
 csv = "1.2"
 npy = "0.4.0"
-
-##[package.metadata.maturin]
-##requires-dist = [...]
