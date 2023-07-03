@@ -38,7 +38,7 @@ RAGBooster is available as [pip package](https://pypi.org/project/ragbooster/), 
  1. Change to the project directory: `cd ragbooster`
  1. Create a virtualenv: `python3.9 -m venv venv`
  1. Activate the virtualenv `source venv/bin/activate`
- 1. Install the dev dependencies with `pip install .[dev]`
+ 1. Install the dev dependencies with `pip install ".[dev]"`
  1. Build the project `maturin develop --release`
  
  * Optional steps:
