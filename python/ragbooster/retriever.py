@@ -8,6 +8,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+
 # TODO: Integrate retries https://stackoverflow.com/questions/15431044/can-i-set-max-retries-for-requests-request
 class BingRetriever(ABC):
 

@@ -1,10 +1,10 @@
 #[macro_use]
 extern crate bencher;
-extern crate retrieval_importance;
+extern crate ragbooster;
 
 use bencher::Bencher;
-use retrieval_importance::mle::tensors::DenseTensor;
-use retrieval_importance::mle::prob as prob;
+use ragbooster::mle::tensors::DenseTensor;
+use ragbooster::mle::prob as prob;
 
 benchmark_group!(generate_b, generate_b__no_opt, generate_b__from_tensor,
     generate_b__from_tensor_predicated, generate_b__from_tensor_predicated_simd);
