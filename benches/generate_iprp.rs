@@ -1,10 +1,10 @@
 #[macro_use]
 extern crate bencher;
-extern crate retrieval_importance;
+extern crate ragbooster;
 
 use bencher::Bencher;
-use retrieval_importance::mle::tensors::DenseMatrix;
-use retrieval_importance::mle::prob as prob;
+use ragbooster::mle::tensors::DenseMatrix;
+use ragbooster::mle::prob as prob;
 
 benchmark_group!(generate_iprp,
     generate_iprp__no_opt_tiny, generate_iprp__tensors_tiny, generate_iprp__from_tensors_tiny,
@@ -13,54 +13,49 @@ benchmark_group!(generate_iprp,
 );
 benchmark_main!(generate_iprp);
 
+const TINY_M: usize = 100;
+const TINY_K: usize = 10;
+const TINY_P: [f64; TINY_M] = [0.5_f64; TINY_M];
+
+const MEDIUM_M: usize = 1000;
+const MEDIUM_K: usize = 50;
+const MEDIUM_P: [f64; MEDIUM_M] = [0.5_f64; MEDIUM_M];
+
+const LARGE_M: usize = 100;
+const LARGE_K: usize = 10;
+const LARGE_P: [f64; LARGE_M] = [0.5_f64; LARGE_M];
+
 
 #[allow(non_snake_case)]
 fn generate_iprp__no_opt_tiny(bench: &mut Bencher) {
-
-    let M = 100;
-    let K = 10;
-    let p = vec![0.5_f64; M];
-
     bench.iter(|| {
-        bencher::black_box(compute_prob(&p, K, M));
+        bencher::black_box(compute_prob(&TINY_P, TINY_K, TINY_M));
     })
 }
 
 #[allow(non_snake_case)]
 fn generate_iprp__tensors_tiny(bench: &mut Bencher) {
-
-    let M = 100;
-    let K = 10;
-    let p = vec![0.5_f64; M];
-
     bench.iter(|| {
-        bencher::black_box(compute_prob_tensors(&p, K, M));
+        bencher::black_box(compute_prob_tensors(&TINY_P, TINY_K, TINY_M));
     })
 }
 
 #[allow(non_snake_case)]
 fn generate_iprp__from_tensors_tiny(bench: &mut Bencher) {
 
-    let M = 100;
-    let K = 10;
-    let p = vec![0.5_f64; M];
-    let mut IP = DenseMatrix::new(K + 1, M + 2);
-    let mut RP = DenseMatrix::new(K + 1, M + 2);
+    let mut IP = DenseMatrix::new(TINY_K + 1, TINY_M + 2);
+    let mut RP = DenseMatrix::new(TINY_K + 1, TINY_M + 2);
 
     bench.iter(|| {
-        bencher::black_box(prob::compute_prob_from_tensors(&p, K, M, &mut IP, &mut RP));
+        bencher::black_box(prob::compute_prob_from_tensors(
+            &TINY_P, TINY_K, TINY_M, &mut IP, &mut RP));
     })
 }
 
 #[allow(non_snake_case)]
 fn generate_iprp__no_opt(bench: &mut Bencher) {
-
-    let M = 1000;
-    let K = 50;
-    let p = vec![0.5_f64; M];
-
     bench.iter(|| {
-        bencher::black_box(compute_prob(&p, K, M));
+        bencher::black_box(compute_prob(&MEDIUM_P, MEDIUM_K, MEDIUM_M));
     })
 }
 
@@ -68,13 +63,8 @@ fn generate_iprp__no_opt(bench: &mut Bencher) {
 
 #[allow(non_snake_case)]
 fn generate_iprp__tensors(bench: &mut Bencher) {
-
-    let M = 1000;
-    let K = 50;
-    let p = vec![0.5_f64; M];
-
     bench.iter(|| {
-        bencher::black_box(compute_prob_tensors(&p, K, M));
+        bencher::black_box(compute_prob_tensors(&MEDIUM_P, MEDIUM_K, MEDIUM_M));
     })
 }
 
@@ -83,60 +73,46 @@ fn generate_iprp__tensors(bench: &mut Bencher) {
 #[allow(non_snake_case)]
 fn generate_iprp__from_tensors(bench: &mut Bencher) {
 
-    let M = 1000;
-    let K = 50;
-    let p = vec![0.5_f64; M];
-    let mut IP = DenseMatrix::new(K + 1, M + 2);
-    let mut RP = DenseMatrix::new(K + 1, M + 2);
+    let mut IP = DenseMatrix::new(MEDIUM_K + 1, MEDIUM_M + 2);
+    let mut RP = DenseMatrix::new(MEDIUM_K + 1, MEDIUM_M + 2);
 
     bench.iter(|| {
-        bencher::black_box(prob::compute_prob_from_tensors(&p, K, M, &mut IP, &mut RP));
+        bencher::black_box(prob::compute_prob_from_tensors(
+            &MEDIUM_P, MEDIUM_K, MEDIUM_M, &mut IP, &mut RP));
     })
 }
 
 
 #[allow(non_snake_case)]
 fn generate_iprp__no_opt_larger(bench: &mut Bencher) {
-
-    let M = 5000;
-    let K = 500;
-    let p = vec![0.5_f64; M];
-
     bench.iter(|| {
-        bencher::black_box(compute_prob(&p, K, M));
+        bencher::black_box(compute_prob(&LARGE_P, LARGE_K, LARGE_M));
     })
 }
 
 #[allow(non_snake_case)]
 fn generate_iprp__tensors_larger(bench: &mut Bencher) {
-
-    let M = 5000;
-    let K = 500;
-    let p = vec![0.5_f64; M];
-
     bench.iter(|| {
-        bencher::black_box(compute_prob_tensors(&p, K, M));
+        bencher::black_box(compute_prob_tensors(&LARGE_P, LARGE_K, LARGE_M));
     })
 }
 
 #[allow(non_snake_case)]
 fn generate_iprp__from_tensors_larger(bench: &mut Bencher) {
 
-    let M = 5000;
-    let K = 500;
-    let p = vec![0.5_f64; M];
-    let mut IP = DenseMatrix::new(K + 1, M + 2);
-    let mut RP = DenseMatrix::new(K + 1, M + 2);
+    let mut IP = DenseMatrix::new(LARGE_K + 1, LARGE_M + 2);
+    let mut RP = DenseMatrix::new(LARGE_K + 1, LARGE_M + 2);
 
     bench.iter(|| {
-        bencher::black_box(prob::compute_prob_from_tensors(&p, K, M, &mut IP, &mut RP));
+        bencher::black_box(prob::compute_prob_from_tensors(
+            &LARGE_P, LARGE_K, LARGE_M, &mut IP, &mut RP));
     })
 }
 
 
 #[allow(non_snake_case)]
 fn compute_prob(
-    p: &Vec<f64>,
+    p: &[f64],
     K: usize,
     M: usize
 ) -> (Vec<Vec<f64>>, Vec<Vec<f64>>) {
@@ -172,7 +148,7 @@ fn compute_prob(
 
 #[allow(non_snake_case,unused)]
 fn compute_prob_tensors(
-    p: &Vec<f64>,
+    p: &[f64],
     K: usize,
     M: usize
 ) -> (DenseMatrix, DenseMatrix) {
