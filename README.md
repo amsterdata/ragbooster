@@ -10,6 +10,15 @@ Furthermore, we have an additional example notebook, where we demonstrate how to
 
  * [Demo notebook: Boosting minilm-uncased-squad2 for data imputation](demo-boosting-a-small-qa-model.ipynb)
 
+## Core classes
+
+At the core of RAGBooster are [RetrievalAugmentedModels](https://github.com/amsterdata/ragbooster/blob/main/python/ragbooster/rag.py#L11), which fetch external data to improve prediction quality. Retrieval augmentation requires two components:
+
+ * A **retriever**, which retrieves external data for a prediction sample. We currently only implement a [BingRetriever](https://github.com/amsterdata/ragbooster/blob/main/python/ragbooster/retriever.py#L12), which queries Microsoft's Bing Websearch API. 
+ * A **generator**, which generates the final prediction from the prediction sample and the external data. This is typically a large language model. We provide the [Generator](https://github.com/amsterdata/ragbooster/blob/main/python/ragbooster/generator.py#L6) interface, which makes it very easy to leverage LLMs available via an API, for example from OpenAI.
+
+Once you defined your retrieval-augmented model, you can leverage [RAGBooster](https://github.com/amsterdata/ragbooster/blob/main/python/ragbooster/rag.py#L36) to boost its performance by learning the data importance of retrieval sources (e.g., domains in the web). This often increases accuracy by a few percent.
+
 ## Background 
 
 Have a look at our paper on __Improving Retrieval-Augmented Large Language Models with Data-Centric Refinement__ for detailed algorithms, proofs and experimental results. 
