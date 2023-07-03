@@ -21,8 +21,8 @@ const MEDIUM_M: usize = 1000;
 const MEDIUM_K: usize = 50;
 const MEDIUM_P: [f64; MEDIUM_M] = [0.5_f64; MEDIUM_M];
 
-const LARGE_M: usize = 100;
-const LARGE_K: usize = 10;
+const LARGE_M: usize = 5000;
+const LARGE_K: usize = 500;
 const LARGE_P: [f64; LARGE_M] = [0.5_f64; LARGE_M];
 
 
