@@ -43,6 +43,6 @@ RAGBooster is available as [pip package](https://pypi.org/project/ragbooster/), 
  
  * Optional steps:
     * Run the tests with `cargo test --release`
-    * Run the benchmarks with `cargo bench`
+    * Run the benchmarks with `RUSTFLAGS="-C target-cpu=native" cargo bench`
     * Run linting for the Python code with `flake8 python`
     * Start jupyter with `jupyter notebook` and run the example notebooks
