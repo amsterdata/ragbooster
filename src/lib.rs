@@ -27,8 +27,10 @@ fn learn_importance(
             .get_item("retrieved").unwrap()
             .downcast::<PyList>()?.extract().unwrap();
 
-        if *retrieved.iter().max().unwrap() > corpus_size {
-            corpus_size = *retrieved.iter().max().unwrap();
+        if !retrieved.is_empty() {
+            if *retrieved.iter().max().unwrap() > corpus_size {
+                corpus_size = *retrieved.iter().max().unwrap();
+            }
         }
 
         let utility_contributions: Vec<f64> = py_retrieval.downcast::<PyDict>()?

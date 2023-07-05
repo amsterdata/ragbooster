@@ -70,4 +70,7 @@ class BingRetriever(ABC):
         query = self.create_query(question)
         result = self._search(query)
 
-        return [(page['snippet'], page['url']) for page in result['webPages']['value']]
+        if 'webPages' not in result:
+            return []
+        else:
+            return [(page['snippet'], page['url']) for page in result['webPages']['value']]
