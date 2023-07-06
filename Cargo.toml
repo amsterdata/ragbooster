@@ -1,6 +1,6 @@
 [package]
 name = "ragbooster"
-version = "0.1.0-RC2"
+version = "0.1.0-RC3"
 edition = "2021"
 
 [lib]
