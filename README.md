@@ -21,7 +21,7 @@ Once you defined your retrieval-augmented model, you can leverage [RAGBooster](h
 
 ## Background 
 
-Have a look at our paper on __Improving Retrieval-Augmented Large Language Models with Data-Centric Refinement__ for detailed algorithms, proofs and experimental results. 
+Have a look at our paper on [Improving Retrieval-Augmented Large Language Models with Data-Centric Refinement](https://arxiv.org/pdf/2307.03027.pdf) for detailed algorithms and proofs. We also provide the [code and experimental results from the paper](https://github.com/schelterlabs/retrieval_importance) in a separate repo.
 
 ## Installation
 
