@@ -345,7 +345,7 @@ dependencies = [
 
 [[package]]
 name = "ragbooster"
-version = "0.1.0"
+version = "0.1.0-RC2"
 dependencies = [
  "approx",
  "bencher",
