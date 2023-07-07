@@ -6,7 +6,7 @@ We provide an example notebook that shows how we boost [RedPajama-INCITE-Instruc
 
  * [Demo notebook: Boosting RedPajama-INCITE-Instruct-3B-v1 for question answering](demo-boosting-a-small-llm.ipynb)
 
-Furthermore, we have an additional example notebook, where we demonstrate how to boost a [tiny qa model](https://huggingface.co/deepset/minilm-uncased-squad2) to get within 5% accuracy on GPT3.5 on a data imputation task:
+Furthermore, we have an additional example notebook, where we demonstrate how to boost a [tiny qa model](https://huggingface.co/deepset/minilm-uncased-squad2) to get within 5% of the accuracy of GPT3.5 on a data imputation task:
 
  * [Demo notebook: Boosting minilm-uncased-squad2 for data imputation](demo-boosting-a-small-qa-model.ipynb)
 
