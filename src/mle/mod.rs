@@ -8,7 +8,7 @@ use crate::mle::types::{Grouping, Retrieval};
 use itertools::Itertools;
 
 pub fn mle_importance(
-    retrievals: Vec<Retrieval>,
+    mut retrievals: Vec<Retrieval>,
     corpus_size: usize,
     optional_grouping: Option<&Grouping>,
     k: usize,
@@ -18,6 +18,14 @@ pub fn mle_importance(
 ) -> Vec<f64> {
 
     let mut v = vec![0.5_f64; corpus_size];
+
+    retrievals
+        .iter_mut()
+        .for_each(|retrieval| {
+            retrieval.utility_contributions.iter_mut()
+                // TODO Make discretization configurable here
+                .for_each(|u| *u = (*u * 100.0).round() / 100.0)
+        });
 
     let max_distinct_retrieved = max_distinct_retrieved(&retrievals);
     let max_distinct_utility_contributions = max_distinct_utility_contributions(&retrievals);
@@ -85,8 +93,7 @@ fn max_distinct_utility_contributions(retrievals: &[Retrieval]) -> usize {
         .iter()
         .map(|retrieval| {
             retrieval.utility_contributions.iter()
-                // TODO this has to become a parameter!
-                .map(|c| (c * 100.0) as i64) // TODO This is ugly and hardcodes a discretization strategy
+                .map(|x| *x as i64)
                 .unique() // TODO not sure if hashing things is the fastest option here
                 .count()
         })
